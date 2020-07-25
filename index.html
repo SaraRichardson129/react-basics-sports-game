@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Sports Game</title>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+
+        function App(props) {
+            return (
+                <div>
+                    <Team name="Timberwolves" logo="./images/timberwolves logo.jpg" />
+                    <Team name="Warriors" logo="./images/warriors logo.png" />
+                </div>
+            )
+        }
+        class Team extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    name: props.name,
+                    logo: props.logo,
+                    shotsTaken: 0,
+                    score: 0
+                }
+                this.shotsTakenIncrement = this.shotsTakenIncrement.bind(this)
+                this.scoreCounter = this.scoreCounter.bind(this)
+            }
+            shotsTakenIncrement(event) {
+                this.setState((state, props) => (
+                    { shotsTaken: state.shotsTaken + 1 }
+                ))
+            }
+            scoreCounter(event) {
+                this.setState((state, props) => (
+                    { score: state.score + 1 }
+                ))
+            }
+            render() {
+                return (
+                    <div>
+                        <h1>{this.state.name}</h1>
+                        <h4> Shots Taken: {this.state.shotsTaken}</h4>
+                        <h4>Score: {this.state.score}</h4>
+                        <img src={this.state.logo} />
+                        <button onClick={this.shotsTakenIncrement}>SHOOT!</button>
+                    </div>
+                )
+            }
+        }
+
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+
+</html>
