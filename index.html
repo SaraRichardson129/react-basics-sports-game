@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Sports Game</title>
+    <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
@@ -19,11 +20,12 @@
         function App(props) {
             return (
                 <div>
-                    <Team name="Timberwolves" logo="./images/timberwolves logo.jpg" />
-                    <Team name="Warriors" logo="./images/warriors logo.png" />
+                    <Team name="Timberwolves (Home)" logo="./images/timberwolves logo.jpg" />
+                    <Team name="Warriors (Away)" logo="./images/warriors logo.png" />
                 </div>
             )
         }
+
         class Team extends React.Component {
             constructor(props) {
                 super(props)
@@ -36,24 +38,45 @@
                 this.shotsTakenIncrement = this.shotsTakenIncrement.bind(this)
                 this.scoreCounter = this.scoreCounter.bind(this)
             }
+
             shotsTakenIncrement(event) {
                 this.setState((state, props) => (
                     { shotsTaken: state.shotsTaken + 1 }
                 ))
             }
+
             scoreCounter(event) {
-                this.setState((state, props) => (
-                    { score: state.score + 1 }
-                ))
+
+                let random = Math.floor(Math.random() * 2)
+                if (random === 1) {
+                    this.setState((state, props) => (
+                        { score: state.score + 1 }
+                    ))
+                }
             }
+
             render() {
+                let scoreSound = new Audio('./sounds/bball+crowd.wav')
+                if (this.state.score) {
+                    scoreSound.play();
+                }
+                let shotsTakenSound = new Audio('./sounds/Back+Board.wav')
+                if (this.state.shotsTaken) {
+                    shotsTakenSound.play();
+                }
                 return (
                     <div>
                         <h1>{this.state.name}</h1>
                         <h4> Shots Taken: {this.state.shotsTaken}</h4>
                         <h4>Score: {this.state.score}</h4>
                         <img src={this.state.logo} />
-                        <button onClick={this.shotsTakenIncrement}>SHOOT!</button>
+                        {/*https://upmostly.com/tutorials/react-onclick-event-handling-with-examples this is where I found out how to do multi line event handler for my button */}
+                        <button onClick={() => {
+                            this.shotsTakenIncrement();
+                            this.scoreCounter();
+                        }}>
+                            SHOOT!
+                        </button>
                     </div>
                 )
             }
