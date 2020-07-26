@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Sports Game</title>
-    <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
@@ -20,6 +19,14 @@
         function App(props) {
             return (
                 <div>
+                    <Game venue="Fernfield Central" />
+                </div>
+            )
+        }
+        function Game(props) {
+            return (
+                <div>
+                    <h1>Welcome to {props.venue}</h1>
                     <Team name="Timberwolves (Home)" logo="./images/timberwolves logo.jpg" />
                     <Team name="Warriors (Away)" logo="./images/warriors logo.png" />
                 </div>
@@ -33,10 +40,13 @@
                     name: props.name,
                     logo: props.logo,
                     shotsTaken: 0,
-                    score: 0
+                    score: 0,
+                    shotPercentage: 0
                 }
+
                 this.shotsTakenIncrement = this.shotsTakenIncrement.bind(this)
                 this.scoreCounter = this.scoreCounter.bind(this)
+                this.shotPercentageMetric = this.shotPercentageMetric.bind(this)
             }
 
             shotsTakenIncrement(event) {
@@ -46,13 +56,18 @@
             }
 
             scoreCounter(event) {
-
                 let random = Math.floor(Math.random() * 2)
                 if (random === 1) {
                     this.setState((state, props) => (
                         { score: state.score + 1 }
                     ))
                 }
+            }
+
+            shotPercentageMetric(event) {
+                this.setState((state, props) => (
+                    { shotPercentage: state.shotPercentage = Math.floor((this.state.score / this.state.shotsTaken) * 100) }
+                ))
             }
 
             render() {
@@ -64,16 +79,19 @@
                 if (this.state.shotsTaken) {
                     shotsTakenSound.play();
                 }
+
                 return (
                     <div>
                         <h1>{this.state.name}</h1>
                         <h4> Shots Taken: {this.state.shotsTaken}</h4>
                         <h4>Score: {this.state.score}</h4>
+                        <h4>Shots Percentage: {this.state.shotPercentage}</h4>
                         <img src={this.state.logo} />
                         {/*https://upmostly.com/tutorials/react-onclick-event-handling-with-examples this is where I found out how to do multi line event handler for my button */}
                         <button onClick={() => {
                             this.shotsTakenIncrement();
                             this.scoreCounter();
+                            this.shotPercentageMetric();
                         }}>
                             SHOOT!
                         </button>
